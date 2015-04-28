@@ -1,0 +1,341 @@
+Running from development source
+Running test: CorfuDBTester
+ -cp /Users/mwei/devel/CorfuDB/bin/../target/corfudb-0.1-SNAPSHOT-shaded.jar  org.corfudb.runtime.CorfuDBTester -m http://localhost:8002/corfu -s 0 -C CDBLogicalBTree -A recover -z 21 -t 1 -n 20 -k 20 -r 0.25 -v -x -p 9091 -i bnc/initfs_tiny.ser -w bnc/wkldfs_tiny.ser -S -L bnc/data/crash-tiny-CDBLogicalBTree-t1-s0.txt
+master = http://localhost:8002/corfu
+streamimpl = 0
+numthreads = 1
+numops = 20
+numkeys = 20
+rwpct = 0.25
+rpcport = 9091
+log4j:WARN No appenders could be found for logger (org.apache.http.client.protocol.RequestAddCookies).
+log4j:WARN Please initialize the log4j system properly.
+log4j:WARN See http://logging.apache.org/log4j/1.2/faq.html#noconfig for more info.
+[Thread-0] INFO org.reflections.Reflections - Reflections took 87 ms to scan 1 urls, producing 5 keys and 16 values 
+[Thread-0] INFO org.reflections.Reflections - Reflections took 37 ms to scan 1 urls, producing 4 keys and 9 values 
+[Thread-0] INFO org.reflections.Reflections - Reflections took 21 ms to scan 1 urls, producing 3 keys and 5 values 
+[Thread-0] INFO org.reflections.Reflections - Reflections took 24 ms to scan 1 urls, producing 4 keys and 14 values 
+00:00  INFO: Connecting: localhost/127.0.0.1:8003/8003
+00:00  INFO: [kryonet] Connection 15 connected: localhost/127.0.0.1
+[Thread-0] INFO org.corfudb.client.CorfuDBClient - New view epoch 0 greater than old view epoch null, changing views
+listening on port 9091
+Recovering BTreeFS btreeOID:-7736906115563133934
+test case:
+INIT:
+WORKLOAD:
+0	create(ke, root, 129)
+1	mkdir(uqf, root, 529)
+2	create(ehlxup, root/uqf, 102)
+3	mkdir(zqpx, root/uqf, 656)
+4	mkdir(j, root/uqf/zqpx, 523)
+5	create(u, root/uqf/zqpx/j, 15)
+6	mkdir(liiyf, root/uqf/zqpx/j, 648)
+7	create(ujv, root/uqf/zqpx/j/liiyf, 119)
+8	create(y, root/uqf/zqpx/j/liiyf, 96)
+9	create(fjgrep, root/uqf/zqpx/j/liiyf, 248)
+10	create(ld, root/uqf/zqpx/j/liiyf, 220)
+11	create(br, root/uqf/zqpx/j/liiyf, 104)
+12	create(w, root/uqf/zqpx/j/liiyf, 91)
+13	create(ngcrnd, root/uqf/zqpx/j/liiyf, 233)
+14	create(vxpebf, root/uqf/zqpx/j, 237)
+15	create(usz, root/uqf/zqpx/j, 240)
+16	create(gqhrlo, root/uqf/zqpx/j, 131)
+17	mkdir(s, root/uqf/zqpx/j, 639)
+18	create(nzarphr, root/uqf/zqpx/j/s, 43)
+19	mkdir(azeoxj, root/uqf/zqpx/j/s, 692)
+20	create(b, root/uqf/zqpx/j/s/azeoxj, 13)
+21	create(fgtov, root/uqf/zqpx/j/s/azeoxj, 64)
+22	mkdir(uxjtzc, root/uqf/zqpx/j/s, 746)
+23	create(t, root/uqf/zqpx/j/s, 136)
+24	mkdir(ajl, root/uqf/zqpx/j/s, 536)
+25	create(mmqjj, root/uqf/zqpx/j/s/ajl, 28)
+26	create(lmuju, root/uqf/zqpx/j/s/ajl, 219)
+27	create(yz, root/uqf/zqpx/j/s/ajl, 162)
+28	create(j, root/uqf/zqpx/j/s/ajl, 174)
+29	create(sbp, root/uqf/zqpx/j/s/ajl, 217)
+30	create(qlnzd, root/uqf/zqpx/j, 64)
+31	create(h, root/uqf/zqpx, 147)
+32	create(x, root/uqf, 73)
+33	mkdir(ehi, root, 668)
+34	create(ggcnw, root/ehi, 68)
+35	create(cq, root/ehi, 242)
+36	mkdir(euzfs, root/ehi, 619)
+37	create(yhpj, root/ehi/euzfs, 169)
+38	create(mkrpsud, root/ehi/euzfs, 19)
+39	create(grqdr, root/ehi/euzfs, 248)
+40	mkdir(qypal, root/ehi/euzfs, 692)
+41	mkdir(wsqhanw, root/ehi/euzfs/qypal, 694)
+42	create(wcqjs, root/ehi/euzfs/qypal/wsqhanw, 9)
+43	mkdir(ssbu, root/ehi/euzfs/qypal/wsqhanw, 671)
+44	create(ixag, root/ehi/euzfs/qypal/wsqhanw/ssbu, 97)
+45	create(emrlgvi, root/ehi/euzfs/qypal/wsqhanw/ssbu, 142)
+46	create(ellf, root/ehi/euzfs/qypal/wsqhanw/ssbu, 16)
+47	create(exxyjd, root/ehi/euzfs/qypal/wsqhanw/ssbu, 166)
+48	create(hz, root/ehi/euzfs/qypal/wsqhanw/ssbu, 122)
+49	create(tom, root/ehi/euzfs/qypal/wsqhanw/ssbu, 235)
+50	create(lum, root/ehi/euzfs/qypal/wsqhanw/ssbu, 27)
+51	mkdir(diic, root/ehi/euzfs/qypal/wsqhanw, 756)
+52	create(m, root/ehi/euzfs/qypal/wsqhanw/diic, 213)
+53	create(pllqt, root/ehi/euzfs/qypal, 28)
+54	create(itqqr, root/ehi/euzfs, 18)
+55	create(dxrggke, root, 107)
+56	create(zjbjg, root, 116)
+57	mkdir(qghwgvq, root, 742)
+58	mkdir(tujgj, root/qghwgvq, 656)
+59	mkdir(synb, root/qghwgvq/tujgj, 585)
+60	create(pjkzoor, root/qghwgvq/tujgj/synb, 191)
+61	create(zaznloa, root/qghwgvq/tujgj/synb, 96)
+62	mkdir(g, root/qghwgvq/tujgj/synb, 617)
+63	mkdir(vbap, root/qghwgvq/tujgj/synb/g, 738)
+64	create(tokzc, root/qghwgvq/tujgj/synb/g/vbap, 33)
+65	create(vmh, root/qghwgvq/tujgj/synb/g/vbap, 24)
+66	create(zjqfxey, root/qghwgvq/tujgj/synb/g, 221)
+67	create(qtujydp, root/qghwgvq/tujgj/synb/g, 67)
+68	mkdir(qewqkys, root/qghwgvq/tujgj/synb/g, 657)
+69	create(xvwc, root/qghwgvq/tujgj/synb/g/qewqkys, 201)
+70	create(vw, root/qghwgvq/tujgj/synb/g/qewqkys, 47)
+71	create(sbqj, root/qghwgvq/tujgj/synb/g/qewqkys, 173)
+72	create(n, root/qghwgvq/tujgj/synb/g/qewqkys, 233)
+73	create(food, root/qghwgvq/tujgj/synb/g/qewqkys, 241)
+74	create(jo, root/qghwgvq/tujgj/synb/g/qewqkys, 77)
+75	create(jlywqgw, root/qghwgvq/tujgj/synb/g, 89)
+76	create(dpdxbyg, root/qghwgvq/tujgj/synb/g, 201)
+77	mkdir(gwca, root/qghwgvq/tujgj/synb, 613)
+78	mkdir(lnz, root/qghwgvq/tujgj/synb/gwca, 612)
+79	create(p, root/qghwgvq/tujgj/synb/gwca, 4)
+80	mkdir(vawq, root/qghwgvq/tujgj/synb/gwca, 513)
+81	create(jhgfh, root/qghwgvq/tujgj/synb/gwca/vawq, 114)
+82	create(humgtj, root/qghwgvq/tujgj/synb/gwca/vawq, 176)
+83	create(v, root/qghwgvq/tujgj/synb/gwca/vawq, 187)
+84	create(aizg, root/qghwgvq/tujgj/synb/gwca/vawq, 63)
+85	create(qg, root/qghwgvq/tujgj/synb/gwca/vawq, 236)
+86	create(lxm, root/qghwgvq/tujgj/synb/gwca/vawq, 6)
+87	create(xpflr, root/qghwgvq/tujgj/synb/gwca/vawq, 136)
+88	mkdir(kyuhn, root/qghwgvq/tujgj/synb/gwca, 719)
+89	create(zpscg, root/qghwgvq/tujgj/synb, 165)
+90	create(xpaf, root/qghwgvq/tujgj, 179)
+91	create(d, root/qghwgvq/tujgj, 85)
+92	mkdir(kxmrik, root/qghwgvq/tujgj, 541)
+93	create(o, root/qghwgvq/tujgj/kxmrik, 187)
+94	create(rqv, root/qghwgvq/tujgj/kxmrik, 248)
+95	create(bawky, root/qghwgvq/tujgj/kxmrik, 161)
+96	create(jj, root/qghwgvq/tujgj/kxmrik, 0)
+97	create(vg, root/qghwgvq/tujgj/kxmrik, 215)
+98	mkdir(xbpk, root/qghwgvq/tujgj/kxmrik, 759)
+99	create(s, root/qghwgvq/tujgj/kxmrik/xbpk, 82)
+100	mkdir(pydkvf, root/qghwgvq/tujgj, 546)
+101	create(uwytovz, root/qghwgvq/tujgj/pydkvf, 234)
+102	create(dtwsbnb, root/qghwgvq/tujgj/pydkvf, 250)
+103	mkdir(tdlw, root/qghwgvq/tujgj/pydkvf, 698)
+104	create(wn, root/qghwgvq/tujgj/pydkvf/tdlw, 31)
+105	mkdir(vvuyli, root/qghwgvq/tujgj/pydkvf/tdlw, 635)
+106	create(z, root/qghwgvq/tujgj/pydkvf/tdlw, 89)
+107	create(vqsc, root/qghwgvq/tujgj/pydkvf/tdlw, 48)
+108	mkdir(qy, root/qghwgvq/tujgj/pydkvf/tdlw, 718)
+109	mkdir(yhnmrja, root/qghwgvq/tujgj/pydkvf/tdlw, 701)
+110	create(br, root/qghwgvq/tujgj/pydkvf, 117)
+111	create(ntvwuoi, root/qghwgvq/tujgj, 32)
+112	mkdir(xwwc, root/qghwgvq/tujgj, 721)
+113	create(xhuubmz, root/qghwgvq/tujgj/xwwc, 67)
+114	create(yfcahq, root/qghwgvq/tujgj/xwwc, 13)
+115	create(cjh, root/qghwgvq/tujgj/xwwc, 36)
+116	create(nkhjf, root/qghwgvq/tujgj/xwwc, 61)
+117	create(cou, root/qghwgvq, 253)
+118	create(gzljcr, root/qghwgvq, 247)
+119	mkdir(lnssszd, root/qghwgvq, 580)
+120	create(d, root/qghwgvq/lnssszd, 106)
+121	create(d, root/qghwgvq/lnssszd, 38)
+122	mkdir(zhn, root/qghwgvq/lnssszd, 663)
+123	mkdir(wxaqq, root/qghwgvq/lnssszd/zhn, 529)
+124	create(qqzdhpm, root/qghwgvq/lnssszd/zhn/wxaqq, 101)
+125	create(iyid, root/qghwgvq/lnssszd/zhn/wxaqq, 41)
+126	mkdir(ltdcf, root/qghwgvq/lnssszd/zhn, 524)
+127	mkdir(jnhef, root/qghwgvq/lnssszd/zhn/ltdcf, 736)
+128	create(hg, root/qghwgvq/lnssszd/zhn/ltdcf/jnhef, 3)
+129	create(wr, root/qghwgvq/lnssszd/zhn/ltdcf/jnhef, 202)
+130	create(ndd, root/qghwgvq/lnssszd/zhn/ltdcf/jnhef, 198)
+131	create(wxhm, root/qghwgvq/lnssszd/zhn/ltdcf/jnhef, 145)
+132	create(uw, root/qghwgvq/lnssszd/zhn/ltdcf/jnhef, 83)
+133	create(zrybxa, root/qghwgvq/lnssszd/zhn/ltdcf, 16)
+134	create(xvop, root/qghwgvq/lnssszd/zhn, 85)
+135	create(h, root/qghwgvq/lnssszd/zhn, 156)
+136	create(pkx, root/qghwgvq/lnssszd/zhn, 58)
+137	mkdir(ko, root/qghwgvq/lnssszd, 672)
+138	create(hbqpark, root/qghwgvq, 217)
+WKLD:
+WORKLOAD:
+0	search(root/qghwgvq, dxrggke)
+1	readdir(root/qghwgvq)
+2	search(root/qghwgvq, dxrggke)
+3	mkdir(nrg, root/qghwgvq, 33)
+4	readdir(root/qghwgvq)
+5	readdir(root/qghwgvq)
+6	mkdir(ihx, root/qghwgvq, 16)
+7	open(root/dxrggke,42)
+8	open(root/dxrggke,54)
+9	open(root/dxrggke,231)
+10	access(root/dxrggke, 36)
+11	mkdir(dfqxe, root/qghwgvq, 78)
+12	readdir(root/qghwgvq)
+13	access(root/dxrggke, 6)
+14	search(root/qghwgvq, pzafgh)
+15	readdir(root/qghwgvq)
+16	readdir(root/qghwgvq)
+17	readdir(root/qghwgvq)
+18	mkdir(qqb, root/qghwgvq, 46)
+19	search(root/qghwgvq, wjtwpy)
+20	search(root/qghwgvq, dxrggke)
+21	mkdir(mublrdwsbwb, root/qghwgvq, 74)
+22	readdir(root/qghwgvq)
+23	search(root/qghwgvq, w)
+24	mkdir(ccjp, root/qghwgvq, 46)
+25	open(root/dxrggke,218)
+26	search(root/qghwgvq, dxrggke)
+27	mkdir(sxons, root/qghwgvq, 107)
+28	readdir(root/qghwgvq)
+29	open(root/dxrggke,45)
+30	search(root/qghwgvq, csdbklwmu)
+31	search(root/qghwgvq, avzcxuaekun)
+32	search(root/qghwgvq, dxrggke)
+33	open(root/dxrggke,190)
+34	readdir(root/qghwgvq)
+35	open(root/dxrggke,155)
+36	readdir(root/qghwgvq)
+37	open(root/dxrggke,121)
+38	readdir(root/qghwgvq)
+39	access(root/dxrggke, 169)
+40	rmdir(root/qghwgvq)
+41	search(root/qghwgvq, urxufydpz)
+42	search(root/qghwgvq, bglxh)
+43	access(root/dxrggke, 80)
+44	open(root/dxrggke,61)
+45	rmdir(root/qghwgvq)
+46	mkdir(dvxklkowpvc, root/qghwgvq, 172)
+47	search(root/qghwgvq, dxrggke)
+48	readdir(root/qghwgvq)
+49	open(root/dxrggke,75)
+
+playing mkdir(mublrdwsbwb, root/qghwgvq, 74)...
+FSREQLAT, 3203, 	"mkdir(mublrdwsbwb, root/qghwgvq, 74)"
+playing readdir(root/qghwgvq)...
+FSREQLAT, 1, 	"readdir(root/qghwgvq)"
+playing search(root/qghwgvq, w)...
+FSREQLAT, 2, 	"search(root/qghwgvq, w)"
+playing mkdir(ccjp, root/qghwgvq, 46)...
+FSREQLAT, 2, 	"mkdir(ccjp, root/qghwgvq, 46)"
+playing open(root/dxrggke,218)...
+FSREQLAT, 1, 	"open(root/dxrggke,218)"
+playing search(root/qghwgvq, dxrggke)...
+FSREQLAT, 2, 	"search(root/qghwgvq, dxrggke)"
+playing mkdir(sxons, root/qghwgvq, 107)...
+FSREQLAT, 2, 	"mkdir(sxons, root/qghwgvq, 107)"
+playing readdir(root/qghwgvq)...
+FSREQLAT, 1, 	"readdir(root/qghwgvq)"
+playing open(root/dxrggke,45)...
+FSREQLAT, 2, 	"open(root/dxrggke,45)"
+playing search(root/qghwgvq, csdbklwmu)...
+FSREQLAT, 2, 	"search(root/qghwgvq, csdbklwmu)"
+TPUT, 0, 10 3219, 3.107, 30, 1427274488519
+playing search(root/qghwgvq, avzcxuaekun)...
+FSREQLAT, 2, 	"search(root/qghwgvq, avzcxuaekun)"
+playing search(root/qghwgvq, dxrggke)...
+FSREQLAT, 2, 	"search(root/qghwgvq, dxrggke)"
+playing open(root/dxrggke,190)...
+FSREQLAT, 2, 	"open(root/dxrggke,190)"
+playing readdir(root/qghwgvq)...
+FSREQLAT, 1, 	"readdir(root/qghwgvq)"
+playing open(root/dxrggke,155)...
+FSREQLAT, 2, 	"open(root/dxrggke,155)"
+playing readdir(root/qghwgvq)...
+FSREQLAT, 1, 	"readdir(root/qghwgvq)"
+playing open(root/dxrggke,121)...
+FSREQLAT, 1, 	"open(root/dxrggke,121)"
+playing readdir(root/qghwgvq)...
+FSREQLAT, 1, 	"readdir(root/qghwgvq)"
+playing access(root/dxrggke, 169)...
+FSREQLAT, 1, 	"access(root/dxrggke, 169)"
+playing rmdir(root/qghwgvq)...
+FSREQLAT, 3, 	"rmdir(root/qghwgvq)"
+TPUT, 1, 10 18, 555.556, 40, 1427274488537
+playing search(root/qghwgvq, urxufydpz)...
+FSREQLAT, 1, 	"search(root/qghwgvq, urxufydpz)"
+playing search(root/qghwgvq, bglxh)...
+FSREQLAT, 2, 	"search(root/qghwgvq, bglxh)"
+playing access(root/dxrggke, 80)...
+FSREQLAT, 1, 	"access(root/dxrggke, 80)"
+playing open(root/dxrggke,61)...
+FSREQLAT, 1, 	"open(root/dxrggke,61)"
+playing rmdir(root/qghwgvq)...
+FSREQLAT, 1, 	"rmdir(root/qghwgvq)"
+playing mkdir(dvxklkowpvc, root/qghwgvq, 172)...
+FSREQLAT, 1, 	"mkdir(dvxklkowpvc, root/qghwgvq, 172)"
+playing search(root/qghwgvq, dxrggke)...
+FSREQLAT, 1, 	"search(root/qghwgvq, dxrggke)"
+playing readdir(root/qghwgvq)...
+FSREQLAT, 1, 	"readdir(root/qghwgvq)"
+playing open(root/dxrggke,75)...
+FSREQLAT, 1, 	"open(root/dxrggke,75)"
+TPUT, 2, 9 11, 818.182, 49, 1427274488548
+FS after test:
+root	d------rwx/
+  *ke	--w----r--
+  uqf	d----w-r--/
+    *ehlxup	-r----x-wx
+    zqpx	d-w--w----/
+      j	d---r--rw-/
+        *u	----r--rwx
+        liiyf	d-w-r-----/
+          *ujv	-r---wxrwx
+          *y	-r----x---
+          *fjgrep	-rw-rwx---
+          *ld	-rw-rw---x
+          *br	-r--r-x---
+          *w	-r--rw-rw-
+          *ngcrnd	-rw-r-xr--
+        *vxpebf	-rw-r-xr-x
+        *usz	-rw--wx---
+        *gqhrlo	--w----rw-
+        s	dr--rwxrwx/
+          *nzarphr	----r-xrw-
+          azeoxj	d-w--wx--x/
+            *b	----r--r-x
+            *fgtov	-r--------
+          uxjtzc	drw-r-x-w-/
+          *t	--w-r-----
+          ajl	d---rw----/
+            *mmqjj	----rw---x
+            *lmuju	-rw-rw-rw-
+            *yz	--w---x-w-
+            *j	--w-r-x-wx
+            *sbp	-rw-rw-r--
+        *qlnzd	-r--------
+      *h	--w--w-rw-
+    *x	-r--r--r--
+  ehi	d-w-rw---x/
+    *ggcnw	-r-------x
+    *cq	-rw--wx-w-
+    euzfs	dr--r-xrw-/
+      *yhpj	--w-r-xr--
+      *mkrpsud	-----w-rw-
+      *grqdr	-rw-rwx---
+      qypal	d-w--wx--x/
+        wsqhanw	d-w--wx-wx/
+          *wcqjs	----r--r--
+          ssbu	d-w-rw-rwx/
+            *ixag	-r----xr--
+            *emrlgvi	--w-r---wx
+            *ellf	-----w----
+            *exxyjd	--w---x-wx
+            *hz	-r--rwx-w-
+            *tom	-rw-r-xrw-
+            *lum	----rw-rw-
+          diic	drw--wx--x/
+            *m	-rw--w-r-x
+        *pllqt	----rw---x
+      *itqqr	-----w--w-
+  *dxrggke	-r--r-xrw-
+  *zjbjg	-r---wx--x
+
+BTree REQ stats:
+
+Test done in 3344

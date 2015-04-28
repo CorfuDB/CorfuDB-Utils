@@ -1,0 +1,143 @@
+Running from development source
+Running test: CorfuDBTester
+ -cp /Users/mwei/devel/CorfuDB/bin/../target/corfudb-0.1-SNAPSHOT-shaded.jar  org.corfudb.runtime.CorfuDBTester -m http://localhost:8002/corfu -s 0 -C CDBPhysicalBTree -A recover -z 21 -t 1 -n 20 -k 20 -r 0.25 -v -x -p 9091 -i bnc/initfs_miniscule.ser -w bnc/wkldfs_miniscule.ser -S -L bnc/data/crash-miniscule-CDBPhysicalBTree-t1-s0.txt
+master = http://localhost:8002/corfu
+streamimpl = 0
+numthreads = 1
+numops = 20
+numkeys = 20
+rwpct = 0.25
+rpcport = 9091
+log4j:WARN No appenders could be found for logger (org.apache.http.client.protocol.RequestAddCookies).
+log4j:WARN Please initialize the log4j system properly.
+log4j:WARN See http://logging.apache.org/log4j/1.2/faq.html#noconfig for more info.
+[Thread-0] INFO org.reflections.Reflections - Reflections took 93 ms to scan 1 urls, producing 5 keys and 16 values 
+[Thread-0] INFO org.reflections.Reflections - Reflections took 26 ms to scan 1 urls, producing 4 keys and 9 values 
+[Thread-0] INFO org.reflections.Reflections - Reflections took 20 ms to scan 1 urls, producing 3 keys and 5 values 
+[Thread-0] INFO org.reflections.Reflections - Reflections took 23 ms to scan 1 urls, producing 4 keys and 14 values 
+00:00  INFO: Connecting: localhost/127.0.0.1:8003/8003
+00:00  INFO: [kryonet] Connection 13 connected: localhost/127.0.0.1
+[Thread-0] INFO org.corfudb.client.CorfuDBClient - New view epoch 0 greater than old view epoch null, changing views
+listening on port 9091
+Recovering BTreeFS btreeOID:-1
+test case:
+INIT:
+WORKLOAD:
+0	mkdir(jdp, root, 622)
+1	create(rq, root/jdp, 210)
+2	mkdir(xlv, root/jdp, 714)
+3	create(cpx, root/jdp/xlv, 250)
+4	create(xeqq, root/jdp, 111)
+5	create(w, root/jdp, 163)
+6	create(kzbgyuw, root/jdp, 29)
+7	mkdir(cpkdh, root, 753)
+8	create(ntgnqm, root/cpkdh, 162)
+9	create(nenvdey, root/cpkdh, 190)
+10	mkdir(ira, root/cpkdh, 635)
+11	mkdir(etnvk, root/cpkdh/ira, 709)
+12	create(luh, root/cpkdh/ira/etnvk, 12)
+13	mkdir(r, root/cpkdh/ira/etnvk, 572)
+14	create(bd, root/cpkdh/ira/etnvk/r, 68)
+15	create(sfyeefj, root/cpkdh/ira/etnvk/r, 173)
+16	create(xp, root/cpkdh/ira/etnvk/r, 66)
+17	mkdir(tbhc, root/cpkdh/ira/etnvk, 542)
+18	create(jcwl, root/cpkdh/ira/etnvk/tbhc, 76)
+19	create(uonvsjl, root/cpkdh/ira/etnvk/tbhc, 50)
+20	create(iuatsdu, root/cpkdh/ira/etnvk/tbhc, 84)
+21	create(ygpetw, root/cpkdh/ira/etnvk/tbhc, 123)
+22	create(nomghzl, root/cpkdh/ira/etnvk/tbhc, 51)
+23	mkdir(byr, root/cpkdh/ira/etnvk, 615)
+24	create(qwlc, root/cpkdh/ira/etnvk/byr, 91)
+25	create(f, root/cpkdh/ira/etnvk/byr, 131)
+26	create(htqwzk, root/cpkdh/ira/etnvk/byr, 160)
+27	create(mlqtugc, root/cpkdh/ira/etnvk/byr, 191)
+28	create(atpg, root/cpkdh/ira/etnvk/byr, 193)
+29	create(zyx, root/cpkdh/ira/etnvk/byr, 233)
+30	create(ftaiux, root/cpkdh/ira/etnvk, 220)
+31	create(atrlqas, root/cpkdh/ira/etnvk, 48)
+32	mkdir(zvr, root/cpkdh/ira, 668)
+33	create(fnthgow, root/cpkdh/ira/zvr, 253)
+34	create(aqzngzv, root/cpkdh/ira/zvr, 146)
+35	create(slt, root/cpkdh/ira/zvr, 221)
+36	mkdir(fqc, root/cpkdh/ira/zvr, 589)
+37	create(f, root/cpkdh/ira/zvr/fqc, 13)
+38	create(sy, root/cpkdh/ira/zvr/fqc, 238)
+39	create(l, root/cpkdh/ira/zvr/fqc, 55)
+40	create(f, root/cpkdh/ira/zvr, 19)
+41	create(q, root/cpkdh/ira, 76)
+42	mkdir(r, root/cpkdh/ira, 523)
+43	create(zozeg, root/cpkdh/ira/r, 62)
+44	create(ma, root/cpkdh/ira/r, 47)
+45	create(myvlqz, root/cpkdh/ira/r, 74)
+46	mkdir(judxjrm, root/cpkdh/ira/r, 664)
+47	create(u, root/cpkdh/ira/r/judxjrm, 62)
+48	create(nyxa, root/cpkdh/ira/r/judxjrm, 130)
+49	create(i, root/cpkdh/ira/r/judxjrm, 220)
+50	create(logxuhc, root/cpkdh/ira/r/judxjrm, 168)
+51	create(t, root/cpkdh/ira/r/judxjrm, 172)
+52	create(d, root/cpkdh/ira/r, 45)
+53	mkdir(dfhujsc, root/cpkdh, 737)
+54	mkdir(amubo, root/cpkdh/dfhujsc, 563)
+55	create(ngacufy, root/cpkdh/dfhujsc/amubo, 155)
+56	create(qua, root/cpkdh/dfhujsc/amubo, 58)
+57	create(v, root/cpkdh/dfhujsc/amubo, 246)
+58	create(koyt, root/cpkdh/dfhujsc, 196)
+59	create(zxd, root/cpkdh/dfhujsc, 218)
+60	create(bdn, root, 103)
+WKLD:
+WORKLOAD:
+0	search(root/cpkdh, bdn)
+1	search(root/cpkdh, bdn)
+2	open(root/bdn,165)
+3	rmdir(root/cpkdh)
+4	access(root/bdn, 209)
+5	access(root/bdn, 94)
+6	delete(root/bdn)
+7	open(root/bdn,226)
+8	mkdir(hsjgcpj, root/cpkdh, 76)
+9	mkdir(hriob, root/cpkdh, 74)
+10	readdir(root/cpkdh)
+11	open(root/bdn,245)
+12	mkdir(udsfgyllksg, root/cpkdh, 134)
+13	open(root/bdn,148)
+14	mkdir(tlashdv, root/cpkdh, 62)
+15	search(root/cpkdh, lfofwd)
+16	mkdir(u, root/cpkdh, 83)
+17	readdir(root/cpkdh)
+18	search(root/cpkdh, bdn)
+19	open(root/bdn,110)
+20	open(root/bdn,64)
+21	open(root/bdn,183)
+22	mkdir(qiswplo, root/cpkdh, 133)
+23	search(root/cpkdh, bdn)
+24	open(root/bdn,149)
+25	mkdir(fihjetsjayk, root/cpkdh, 143)
+26	open(root/bdn,236)
+27	search(root/cpkdh, v)
+28	open(root/bdn,67)
+29	access(root/bdn, 126)
+
+playing open(root/bdn,183)...
+FSREQLAT, 4, 	"open(root/bdn,183)"
+playing mkdir(qiswplo, root/cpkdh, 133)...
+FSREQLAT, 4, 	"mkdir(qiswplo, root/cpkdh, 133)"
+playing search(root/cpkdh, bdn)...
+FSREQLAT, 3, 	"search(root/cpkdh, bdn)"
+playing open(root/bdn,149)...
+FSREQLAT, 4, 	"open(root/bdn,149)"
+playing mkdir(fihjetsjayk, root/cpkdh, 143)...
+FSREQLAT, 4, 	"mkdir(fihjetsjayk, root/cpkdh, 143)"
+playing open(root/bdn,236)...
+FSREQLAT, 4, 	"open(root/bdn,236)"
+playing search(root/cpkdh, v)...
+FSREQLAT, 3, 	"search(root/cpkdh, v)"
+playing open(root/bdn,67)...
+FSREQLAT, 3, 	"open(root/bdn,67)"
+playing access(root/bdn, 126)...
+FSREQLAT, 3, 	"access(root/bdn, 126)"
+TPUT, 0, 9 33, 272.727, 29, 1427274479352
+FS after test:
+--missing--
+BTree REQ stats:
+
+Test done in 5889

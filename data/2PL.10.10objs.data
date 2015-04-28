@@ -1,0 +1,15 @@
+Running from development source
+Running test: ObjectClient
+[main] INFO org.corfudb.tests.ObjectClient - numobjs=10, runs=10, txns=10
+00:00  INFO: Connecting: /104.40.57.207:5000/5000
+00:00  INFO: [kryonet] Connection 41 connected: /104.40.57.207
+00:00  INFO: Connecting: /191.237.23.229:5000/5000
+00:00  INFO: [kryonet] Connection 36 connected: /191.237.23.229
+00:00  INFO: Connecting: /104.40.221.153:5000/5000
+00:01  INFO: [kryonet] Connection 32 connected: /104.40.221.153
+00:01  INFO: Connecting: /23.102.29.11:5000/5000
+00:01  INFO: [kryonet] Connection 23 connected: /23.102.29.11
+Total time: 4122.99 ms
+Acquire lock                                     : total/opssec 4000/94.88 min/max/avg/p95/p99 32.88/559.35/116.77/176.83/226.07
+Release lock                                     : total/opssec 4000/95.35 min/max/avg/p95/p99 32.55/216.35/119.21/176.71/189.93
+total                                            : total/opssec 10/0.24 min/max/avg/p95/p99 4122.99/4556.56/4200.62/4556.56/4556.56
