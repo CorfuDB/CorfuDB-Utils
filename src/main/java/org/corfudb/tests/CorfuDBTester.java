@@ -13,20 +13,23 @@
  * limitations under the License.
  */
 
-package org.corfudb.runtime;
+package org.corfudb.tests;
 
-import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.nio.ByteBuffer;
 import java.util.*;
 
 import gnu.getopt.Getopt;
 import org.apache.zookeeper.CreateMode;
-import org.corfudb.client.CorfuDBClient;
+import org.corfudb.runtime.CorfuDBRuntime;
 import org.corfudb.runtime.collections.*;
-import org.corfudb.client.view.Serializer;
-import org.corfudb.tests.BTreeFS;
+import org.corfudb.runtime.smr.*;
+import org.corfudb.runtime.smr.legacy.*;
+import org.corfudb.runtime.stream.IStream;
+import org.corfudb.runtime.view.ISequencer;
+import org.corfudb.runtime.view.IStreamingSequencer;
+import org.corfudb.runtime.view.IWriteOnceAddressSpace;
+import org.corfudb.util.CorfuDBFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -99,6 +102,12 @@ public class CorfuDBTester
         final int BTREEFS_PLAYBACK = 15;
         final int BTREEFS_CRASH = 16;
         final int BTREEFS_RECOVER = 17;
+        final String DEFAULT_ADDRESS_SPACE = "WriteOnceAddressSpace";
+        final String DEFAULT_STREAM_IMPL = "SimpleStream";
+        final String DUMMYSTREAMIMPL = "SimpleStream";
+        final String HOPSTREAMIMPL = "HopStream";
+        final String MEMORYSTREAM = "MemoryStream";
+        String streamimpl = DEFAULT_STREAM_IMPL;
 
         int c;
         int numclients = 2;
@@ -126,10 +135,6 @@ public class CorfuDBTester
         boolean serialize = false;
         boolean compress = false;
 
-        final int DUMMYSTREAMIMPL = 0;
-        final int HOPSTREAMIMPL = 1;
-        final int INMEMORYIMPL = 2;
-        int streamimpl = DUMMYSTREAMIMPL;
 
         if(args.length==0)
         {
@@ -186,12 +191,12 @@ public class CorfuDBTester
                 case 's':
                     strArg = g.getOptarg();
                     System.out.println("streamimpl = "+ strArg);
-                    streamimpl = Integer.parseInt(strArg);
+                    streamimpl = strArg;
                 case 'T':
                     testCase = g.getOptarg();
                     break;
                 case 'x':
-                    TXListTester.extremeDebug = true;
+                    org.corfudb.tests.TXListTester.extremeDebug = true;
                     BTreeTester.extremeDebug = true;
                     BTreeTester.trackOps = true;
                     CDBPhysicalBTree.extremeDebug = true;
@@ -284,33 +289,30 @@ public class CorfuDBTester
             throw new RuntimeException(e);
         }
 
+        HashMap<String, Object> opts = new HashMap();
+        opts.put("--master", masternode);
+        opts.put("--address-space", DEFAULT_ADDRESS_SPACE);
+        opts.put("--stream-impl", streamimpl);
+        CorfuDBFactory factory = new CorfuDBFactory(opts);
+        CorfuDBRuntime crfa = null;
 
-        CorfuDBClient crfa = null;
-
-        if (streamimpl != INMEMORYIMPL)
+        if (streamimpl != MEMORYSTREAM)
         {
-            crfa = new CorfuDBClient(masternode);
+            crfa = factory.getRuntime();
             crfa.startViewManager();
             crfa.waitForViewReady();
         }
 
         Thread[] threads = new Thread[numthreads];
 
-        IStreamFactory sf;
-        if(streamimpl==DUMMYSTREAMIMPL)
-            sf = new IStreamFactoryImpl(new CorfuLogAddressSpace(crfa, 0), new CorfuStreamingSequencer(crfa)); //todo: fill in the right logid
-        else if(streamimpl==HOPSTREAMIMPL)
-            sf = new HopAdapterIStreamFactoryImpl(crfa);
-        else if(streamimpl==INMEMORYIMPL)
-            sf = new MemoryStreamFactoryImpl(serialize, compress);
-        else
-            throw new RuntimeException("unknown stream implementation");
-
         long starttime = System.currentTimeMillis();
 
         AbstractRuntime TR = null;
         DirectoryService DS = null;
         CorfuDBCounter barrier=null;
+        IStreamingSequencer seq = factory.getStreamingSequencer(crfa);
+        IWriteOnceAddressSpace woas = factory.getWriteOnceAddressSpace(crfa);
+        IStreamFactory sf = factory.getStreamFactory(seq, woas);
 
         if(testnum==LINTEST)
         {
@@ -324,7 +326,7 @@ public class CorfuDBTester
             else
             {
                 TR = new TXRuntime(sf, DirectoryService.getUniqueID(sf), rpchostname, rpcport);
-                CDBLinkedList<Long> partitionlist = new CDBLinkedList<>(TR, sf, DirectoryService.getUniqueID(sf));
+                CDBLinkedList<UUID> partitionlist = new CDBLinkedList<>(TR, sf, DirectoryService.getUniqueID(sf));
                 while(true)
                 {
                     TR.BeginTX();
@@ -404,7 +406,9 @@ public class CorfuDBTester
         }
         else if(testnum==STREAMTEST)
         {
-            Stream sb = sf.newStream(1234);
+            throw new RuntimeException("STREAMTEST no longer implemented due to deprecation of previous Stream interface.");
+            /*
+            IStream sb = sf.newStream(new UUID(0, 1234));
 
             //trim the stream to get rid of entries from previous tests
             //sb.prefixTrim(sb.checkTail()); //todo: turning off, trim not yet implemented at log level
@@ -415,6 +419,7 @@ public class CorfuDBTester
             }
             for(int i=0;i<numthreads;i++)
                 threads[i].join();
+                */
         }
         else if(testnum==TXLOGICALLIST) {
             TR = new TXRuntime(sf, DirectoryService.getUniqueID(sf), rpchostname, rpcport, true);
@@ -818,11 +823,12 @@ class MapTesterThread implements Runnable
 }
 
 
+/*
 class StreamTester implements Runnable
 {
-    Stream sb;
+    IStream sb;
     int numops = 10000;
-    public StreamTester(Stream tsb, int nops)
+    public StreamTester(IStream tsb, int nops)
     {
         sb = tsb;
         numops = nops;
@@ -839,7 +845,7 @@ class StreamTester implements Runnable
         }
     }
 }
-
+*/
 
 
 

@@ -1,6 +1,6 @@
 package org.corfudb.tests;
 
-import org.corfudb.runtime.Pair;
+import org.corfudb.runtime.smr.Pair;
 
 import java.io.*;
 import java.util.*;

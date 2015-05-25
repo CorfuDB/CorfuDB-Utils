@@ -1,5 +1,7 @@
 package org.corfudb.tests;
 import org.corfudb.runtime.*;
+import org.corfudb.runtime.smr.*;
+import org.corfudb.runtime.smr.legacy.*;
 import org.corfudb.runtime.collections.CDBAbstractBTree;
 import org.corfudb.runtime.collections.CDBLogicalBTree;
 import org.corfudb.runtime.collections.CDBPhysicalBTree;
@@ -551,7 +553,7 @@ public class BTreeFS {
         AbstractRuntime tTR,
         IStreamFactory tsf,
         String strBTreeClass,
-        long toid
+        UUID toid
         ) {
         if(toid == CorfuDBObject.oidnull)
             toid = DirectoryService.getUniqueID(tsf);
@@ -584,7 +586,7 @@ public class BTreeFS {
             int nMaxDirEntries,
             int nMaxHeight,
             String strBTreeClass,
-            long btreeOID,
+            UUID btreeOID,
             boolean transactional
         ) {
         m_rt = tTR;
@@ -629,7 +631,7 @@ public class BTreeFS {
             AbstractRuntime tTR,
             IStreamFactory tsf,
             String strBTreeClass,
-            long btreeOID,
+            UUID btreeOID,
             boolean transactional
         ) {
         this(tTR, tsf,
@@ -892,7 +894,7 @@ public class BTreeFS {
             AbstractRuntime tTR,
             IStreamFactory tsf,
             String strBTreeClass,
-            long btreeOID,
+            UUID btreeOID,
             boolean transactional
         ) {
         return new BTreeFS(tTR, tsf, strBTreeClass, btreeOID, transactional);
@@ -1933,8 +1935,8 @@ public class BTreeFS {
             String strCrashLogPath,
             int nRecoverOp
         ) {
-        Pair<Long, Long> oids = recoverOIDs(strCrashLogPath);
-        long btreeOID = oids.first;
+        Pair<UUID, UUID> oids = recoverOIDs(strCrashLogPath);
+        UUID btreeOID = oids.first;
         System.out.format("Recovering BTreeFS btreeOID:%d\n", btreeOID);
         BTreeFS fs = BTreeFS.attachFS(tTR, tsf, strBTreeClass, btreeOID, transactional);
         FileSystemDriver driver = new FileSystemDriver(fs, strInitPath, strWkldPath);
@@ -1952,20 +1954,20 @@ public class BTreeFS {
      * @param strPath
      * @return
      */
-    public static Pair<Long, Long>
+    public static Pair<UUID, UUID>
     recoverOIDs(String strPath) {
         try {
-            long btreeOID = CorfuDBObject.oidnull;
-            long indexOID = CorfuDBObject.oidnull;
+            UUID btreeOID = CorfuDBObject.oidnull;
+            UUID indexOID = CorfuDBObject.oidnull;
             Path path = Paths.get(strPath);
             List<String> lines = Files.readAllLines(path);
             for(String s : lines) {
                 if(s.startsWith(strBTREEOID)) {
                     String strOID = s.substring(strBTREEOID.length());
-                    btreeOID = Long.parseLong(strOID);
+                    btreeOID = UUID.fromString(strOID);
                 } else if(s.startsWith(strINDEXOID)) {
                     String strOID = s.substring(strINDEXOID.length());
-                    indexOID = Long.parseLong(strOID);
+                    indexOID = UUID.fromString(strOID);
                 }
             }
             return new Pair(btreeOID, indexOID);

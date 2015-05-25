@@ -1,19 +1,17 @@
 package org.corfudb.tests;
 
-import org.corfudb.client.CorfuDBClient;
-import org.corfudb.client.view.Sequencer;
-import org.corfudb.client.view.WriteOnceAddressSpace;
-import org.corfudb.client.abstractions.SharedLog;
-
-import org.corfudb.client.abstractions.Stream;
-import org.corfudb.client.OutOfSpaceException;
+import org.corfudb.runtime.CorfuDBRuntime;
+import org.corfudb.runtime.entries.IStreamEntry;
+import org.corfudb.runtime.stream.IStream;
+import org.corfudb.runtime.stream.ITimestamp;
+import org.corfudb.runtime.view.IStreamingSequencer;
+import org.corfudb.runtime.view.IWriteOnceAddressSpace;
+import org.corfudb.util.CorfuDBFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
-
-import org.corfudb.client.entries.CorfuDBStreamEntry;
-import org.corfudb.client.Timestamp;
 
 /**
  * Created by dmalkhi on 1/16/15.
@@ -21,6 +19,7 @@ import org.corfudb.client.Timestamp;
 public class StreamInspector {
 
     private static final Logger log = LoggerFactory.getLogger(CorfuHello.class);
+    public static final String DEFAULT_ADDRESS_SPACE = "WriteOnceAddressSpace";
 
     /**
 
@@ -40,16 +39,23 @@ public class StreamInspector {
 
         final int numthreads = 1;
 
-        CorfuDBClient client = new CorfuDBClient(masteraddress);
+        Map<String, Object> opts = new HashMap();
+        opts.put("--master", masteraddress);
+        opts.put("--address-space", DEFAULT_ADDRESS_SPACE);
+        CorfuDBFactory factory = new CorfuDBFactory(opts);
+        CorfuDBRuntime client = factory.getRuntime();
+        client.startViewManager();
+        IWriteOnceAddressSpace addressSpace = factory.getWriteOnceAddressSpace(client);
+        IStreamingSequencer sequencer = factory.getStreamingSequencer(client);
         client.startViewManager();
 
-        try (Stream s = new Stream(client, UUID.fromString(args[1])))
+        try (IStream s = factory.getStream(UUID.fromString(args[1]), sequencer, addressSpace))
         {
             while (true)
             {
-                CorfuDBStreamEntry cdse = s.readNextEntry();
-                Timestamp t = cdse.getTimestamp();
-                log.info("{} \t {} \t {}", t.pos, t.physicalPos, cdse.payload.getClass().toString());
+                IStreamEntry cdse = s.readNextEntry();
+                ITimestamp t = cdse.getTimestamp();
+                log.info("{} \t {}", t, cdse.getPayload().getClass().toString());
             }
         }
 

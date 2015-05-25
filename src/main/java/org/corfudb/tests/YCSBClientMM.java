@@ -5,7 +5,7 @@
  * TBD: how to support range queries/scans? 
  */
 
-package org.corfudb.runtime;
+package org.corfudb.tests;
 import com.yahoo.ycsb.DB;
 import com.yahoo.ycsb.DBException;
 import com.yahoo.ycsb.ByteIterator;
@@ -14,33 +14,53 @@ import com.yahoo.ycsb.StringByteIterator;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.*;
-import org.corfudb.client.CorfuDBClient;
-import org.corfudb.runtime.collections.CDBOrderedMap;
+import org.corfudb.runtime.CorfuDBRuntime;
+import org.corfudb.runtime.collections.CDBLogicalOrderedMap;
+import org.corfudb.runtime.collections.CDBSimpleMap;
+import org.corfudb.runtime.smr.legacy.AbstractRuntime;
+import org.corfudb.runtime.smr.legacy.DirectoryService;
+import org.corfudb.runtime.smr.IStreamFactory;
+import org.corfudb.runtime.stream.IStream;
+import org.corfudb.runtime.view.IStreamingSequencer;
+import org.corfudb.runtime.view.IWriteOnceAddressSpace;
+import org.corfudb.util.CorfuDBFactory;
 
-public class YCSBClient extends DB {
+public class YCSBClientMM extends DB {
 
-    private CorfuDBClient crf;
+    private CorfuDBFactory factory;
+    private CorfuDBRuntime crf;
     private String masternode;
     private String rpchostname;
     private IStreamFactory sf;
     private AbstractRuntime TR = null;
     private DirectoryService DS = null;
-    private CorfuLogAddressSpace addressSpace = null;
-    private CorfuStreamingSequencer sequencer = null;
+    private IWriteOnceAddressSpace addressSpace = null;
+    private IStreamingSequencer sequencer = null;
     private int rpcport = 9090;
-    private CDBOrderedMap<String, Map<String, String>> map = null;
+    private CDBSimpleMap<String, Map<String, String>> map = null;
+    private CDBLogicalOrderedMap<Double, String> index = null;
 
     public static final String DEFAULT_RPCPORT = "9090";
     public static final String DEFAULT_MASTERNODE = "http://localhost:8002/corfu";
     public static final String MASTERNODE_PROPERTY = "corfudb.masternode";
     public static final String RPCPORT_PROPERTY = "corfudb.rpcport";
+    public static final String ADDRESS_SPACE_PROPERTY = "corfudb.addressspace";
+    public static final String DEFAULT_ADDRESS_SPACE = "WriteOnceAddressSpace";
+    private Map<String, Object> opts = new HashMap();
+
+    public static final String INDEX_KEY = "_indices";
 
     public void init() throws DBException {
 
         Properties props = getProperties();
-        masternode = props.getProperty(MASTERNODE_PROPERTY, DEFAULT_MASTERNODE);
-        rpcport = Integer.parseInt(props.getProperty(RPCPORT_PROPERTY, DEFAULT_RPCPORT));
-        crf = new CorfuDBClient(masternode);
+        opts.put("--master", props.getProperty(MASTERNODE_PROPERTY, DEFAULT_MASTERNODE));
+        opts.put("--address-space", props.getProperty(ADDRESS_SPACE_PROPERTY, DEFAULT_ADDRESS_SPACE));
+        opts.put("--port", Integer.parseInt(props.getProperty(RPCPORT_PROPERTY, DEFAULT_RPCPORT)));
+        factory = new CorfuDBFactory(opts);
+        crf = factory.getRuntime();
+        addressSpace = factory.getWriteOnceAddressSpace(crf);
+        sequencer = factory.getStreamingSequencer(crf);
+
         crf.startViewManager();
         crf.waitForViewReady();
 
@@ -50,16 +70,19 @@ public class YCSBClient extends DB {
             throw new RuntimeException(e);
         }
 
-        addressSpace = new CorfuLogAddressSpace(crf, 0);
-        sequencer = new CorfuStreamingSequencer(crf);
-        sf = new IStreamFactoryImpl(addressSpace, sequencer);
-        TR = new TXRuntime(sf, DirectoryService.getUniqueID(sf), rpchostname, rpcport);
-        DS = new DirectoryService(TR);
-        map = new CDBOrderedMap(TR, DS.nameToStreamID("ycsbmap"));
+        IStream mapStream = factory.getStream(UUID.randomUUID(), sequencer, addressSpace);
+        IStream indexStream = factory.getStream(UUID.randomUUID(), sequencer, addressSpace);
+        map = new CDBSimpleMap(mapStream);
+        index = new CDBLogicalOrderedMap(indexStream);
+
     }
 
     public void cleanup() throws DBException {
         // TBD--anything to do here?
+    }
+
+    private double hash(String key) {
+        return key.hashCode();
     }
 
     @Override
@@ -93,6 +116,7 @@ public class YCSBClient extends DB {
         )
     {
         map.put(key, StringByteIterator.getStringMap(values));
+        index.put(hash(key), key);
         return 0;
     }
 
@@ -103,6 +127,7 @@ public class YCSBClient extends DB {
         )
     {
         map.remove(key);
+        index.remove(hash(key));
         return 0;
     }
 
@@ -126,8 +151,8 @@ public class YCSBClient extends DB {
          Vector<HashMap<String, ByteIterator>> result
         )
     {
-        SortedMap<String, Map<String, String>> range = map.getRange(startkey, recordcount);
-        Collection<String> keys = range.keySet();
+        SortedMap<Double, String> range = index.getRange(hash(startkey), recordcount);
+        Collection<String> keys = range.values();
         HashMap<String, ByteIterator> values;
         for (String key : keys) {
             values = new HashMap();

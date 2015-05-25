@@ -1,70 +1,43 @@
- package org.corfudb.tests.benchtests;
+package org.corfudb.tests.benchtests;
 
-import org.corfudb.client.CorfuDBClient;
-import org.corfudb.client.CorfuDBViewSegment;
-import org.corfudb.client.IServerProtocol;
-import org.corfudb.client.view.Sequencer;
-import org.corfudb.client.view.WriteOnceAddressSpace;
-import org.corfudb.client.abstractions.SharedLog;
-import org.corfudb.client.abstractions.Stream;
-import org.corfudb.client.configmasters.IConfigMaster;
-import org.corfudb.client.OutOfSpaceException;
-import org.corfudb.client.OverwriteException;
-import org.corfudb.client.TrimmedException;
-import org.corfudb.client.UnwrittenException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.Map;
-import java.util.Map.Entry;
+import org.corfudb.runtime.CorfuDBRuntime;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.HashSet;
-import java.util.Set;
-
+import java.util.Map;
 import java.util.UUID;
-
-import org.docopt.Docopt;
-
-import com.codahale.metrics.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Callable;
-import java.util.concurrent.CompletableFuture;
-
-import java.util.concurrent.TimeUnit;
-import java.lang.Thread;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
-
+import com.codahale.metrics.*;
+import org.corfudb.runtime.stream.Stream;
 
 @SuppressWarnings({"rawtypes","unchecked"})
 public class MultipleStreamReadTest implements IBenchTest {
-    CorfuDBClient c;
+    CorfuDBRuntime c;
     ArrayList<Stream> sl;
     AtomicLong l;
     byte[] data;
-    public MultipleStreamReadTest() {}
+
+    public MultipleStreamReadTest() {
+    }
+
     ExecutorService exec;
 
     @Override
-    public void doSetup(Map<String, Object> args)
-    {
-        c = getClient(args);
+    public void doSetup(Map<String, Object> args) {
+        c = getRuntime(args);
         c.startViewManager();
         exec = Executors.newFixedThreadPool(getNumThreads(args));
         sl = new ArrayList<Stream>();
         data = new byte[getPayloadSize(args)];
-        for (int i = 0; i < getNumStreams(args); i++)
-        {
+        for (int i = 0; i < getNumStreams(args); i++) {
             sl.add(new Stream(c, UUID.randomUUID(), getNumThreads(args), getStreamAllocationSize(args), exec, false));
         }
 
-        for (long i = 0; i < getNumOperations(args) * 2; i++)
-        {
+        for (long i = 0; i < getNumOperations(args) * 2; i++) {
             try {
-            sl.get((int)i % getNumStreams(args)).append(data);
-            } catch (Exception e) {}
+                sl.get((int) i % getNumStreams(args)).append(data);
+            } catch (Exception e) {
+            }
         }
         l = new AtomicLong();
         c.waitForViewReady();
@@ -72,8 +45,7 @@ public class MultipleStreamReadTest implements IBenchTest {
 
     @Override
     public void close() {
-        for (Stream s : sl)
-        {
+        for (Stream s : sl) {
             s.close();
         }
         exec.shutdownNow();
@@ -81,15 +53,15 @@ public class MultipleStreamReadTest implements IBenchTest {
     }
 
     @Override
-    public void doRun(Map<String,Object> args, long runNum, MetricRegistry m)
-    {
+    public void doRun(Map<String, Object> args, long runNum, MetricRegistry m) {
         int streamNum = (int) (runNum % getNumStreams(args));
         Timer t_logunit = m.timer("read data from stream " + streamNum);
         Timer.Context c_logunit = t_logunit.time();
         try {
-            sl.get(streamNum).readNext();;
+            sl.get(streamNum).readNext();
+            ;
+        } catch (Exception e) {
         }
-        catch (Exception e) {}
         c_logunit.stop();
     }
 }

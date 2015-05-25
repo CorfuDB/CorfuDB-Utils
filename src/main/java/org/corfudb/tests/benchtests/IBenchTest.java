@@ -1,51 +1,52 @@
 package org.corfudb.tests.benchtests;
 
-import org.corfudb.client.CorfuDBClient;
-import org.corfudb.client.CorfuDBViewSegment;
-import org.corfudb.client.IServerProtocol;
-import org.corfudb.client.view.Sequencer;
-import org.corfudb.client.view.WriteOnceAddressSpace;
-import org.corfudb.client.abstractions.SharedLog;
-import org.corfudb.client.abstractions.Stream;
-import org.corfudb.client.configmasters.IConfigMaster;
-import org.corfudb.client.OutOfSpaceException;
-import org.corfudb.client.OverwriteException;
-import org.corfudb.client.TrimmedException;
-import org.corfudb.client.UnwrittenException;
+import org.corfudb.runtime.CorfuDBRuntime;
+import org.corfudb.runtime.stream.IStream;
+import org.corfudb.runtime.view.IStreamingSequencer;
+import org.corfudb.runtime.view.IWriteOnceAddressSpace;
+import org.corfudb.util.CorfuDBFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.HashSet;
-import java.util.Set;
+import com.codahale.metrics.*;
 
 import java.util.UUID;
-
-import org.docopt.Docopt;
-
-import com.codahale.metrics.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
-
-import java.util.concurrent.TimeUnit;
-import java.lang.Thread;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
-
 
 public interface IBenchTest extends AutoCloseable {
     static final Logger log = LoggerFactory.getLogger(IBenchTest.class);
+    ArrayList<CorfuDBFactory> flist = new ArrayList<>();
+    ArrayList<CorfuDBRuntime> rlist = new ArrayList<>();
+    HashMap<UUID, IStream> slist = new HashMap<>();
     void doSetup(Map<String, Object> args);
     void doRun(Map<String,Object> args, long runNum, MetricRegistry m);
     void close();
-    default CorfuDBClient getClient(Map<String,Object> args) {
-        return new CorfuDBClient((String)args.get("<master-address>"));
+    default CorfuDBFactory getFactory(Map<String,Object> args) {
+        if(flist.size() == 0)
+            flist.add(new CorfuDBFactory(args));
+        return getFactory();
     }
+    default CorfuDBRuntime getRuntime(Map<String,Object> args) {
+        if(rlist.size()==0)
+            rlist.add(getFactory(args).getRuntime());
+        return rlist.get(0);
+    }
+    default IStream getStream(UUID uuid) {
+        if(!slist.containsKey(uuid))
+            slist.put(uuid, getFactory().getStream(uuid, getSequencer(), getAddressSpace()));
+        return slist.get(uuid);
+    }
+    default CorfuDBFactory getFactory() { return flist.get(0); }
+    default CorfuDBRuntime getRuntime() { return rlist.get(0); }
+    default IStreamingSequencer getSequencer() { return getFactory().getStreamingSequencer(getRuntime());}
+    default IWriteOnceAddressSpace getAddressSpace() { return getFactory().getWriteOnceAddressSpace(getRuntime()); }
     default int getNumThreads(Map<String,Object> args) {
         return Integer.parseInt((String)args.get("--threads"));
     }

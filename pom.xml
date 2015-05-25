@@ -14,6 +14,8 @@
             <artifactId>corfudb</artifactId>
             <version>0.1-SNAPSHOT</version>
             <scope>compile</scope>
+            <!--<scope>system</scope>-->
+            <!--<systemPath>${basedir}/../CorfuDB/target/corfudb-0.1-SNAPSHOT-shaded.jar</systemPath>-->
         </dependency>
         <dependency>
             <groupId>com.yahoo.ycsb</groupId>
@@ -21,6 +23,11 @@
             <version>0.1.4</version>
 			<scope>system</scope>
 			<systemPath>${basedir}/lib/ycsb-0.1.4/core/lib/core-0.1.4.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.offbytwo</groupId>
+            <artifactId>docopt</artifactId>
+            <version>0.6.0.20150202</version>
         </dependency>
     </dependencies>
 

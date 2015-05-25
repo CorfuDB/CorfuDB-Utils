@@ -1,10 +1,12 @@
 package org.corfudb.tests.benchtests;
 
-import org.corfudb.client.ITimestamp;
-import org.corfudb.runtime.AbstractRuntime;
-import org.corfudb.runtime.CorfuDBObject;
-import org.corfudb.runtime.CorfuDBObjectCommand;
-import org.corfudb.runtime.DirectoryService;
+import org.corfudb.runtime.smr.legacy.AbstractRuntime;
+import org.corfudb.runtime.smr.legacy.CorfuDBObject;
+import org.corfudb.runtime.smr.legacy.CorfuDBObjectCommand;
+import org.corfudb.runtime.smr.legacy.DirectoryService;
+import org.corfudb.runtime.stream.ITimestamp;
+
+import java.util.UUID;
 
 /**
  * Created by crossbach on 4/7/15.
@@ -27,7 +29,7 @@ public class CommandThroughputMicroBenchmark extends MicroBenchmark {
     }
 
     public static class OpaqueObject extends CorfuDBObject {
-        public OpaqueObject(AbstractRuntime tTR, long oid) {
+        public OpaqueObject(AbstractRuntime tTR, UUID oid) {
             super(tTR, oid);
         }
         public void applyToObject(Object o, ITimestamp timestamp) {
@@ -50,7 +52,7 @@ public class CommandThroughputMicroBenchmark extends MicroBenchmark {
 
     public static class SizeableOpaqueObject extends OpaqueObject {
         byte[] m_payload;
-        public SizeableOpaqueObject(AbstractRuntime tTR, long oid, int payloadBytes) {
+        public SizeableOpaqueObject(AbstractRuntime tTR, UUID oid, int payloadBytes) {
             super(tTR, oid);
             m_payload = new byte[payloadBytes];
         }

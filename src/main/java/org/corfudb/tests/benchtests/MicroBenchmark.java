@@ -1,18 +1,19 @@
 package org.corfudb.tests.benchtests;
 
+import com.esotericsoftware.kryo.StreamFactory;
 import gnu.getopt.Getopt;
-import org.corfudb.client.CorfuDBClient;
-import org.corfudb.client.ITimestamp;
 import org.corfudb.runtime.*;
+import org.corfudb.runtime.smr.*;
+import org.corfudb.runtime.smr.legacy.AbstractRuntime;
+import org.corfudb.runtime.smr.legacy.DirectoryService;
+import org.corfudb.runtime.smr.legacy.SimpleRuntime;
+import org.corfudb.runtime.smr.legacy.TXRuntime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.CyclicBarrier;
 
 /**
@@ -45,7 +46,7 @@ public abstract class MicroBenchmark {
     protected Options m_options;
     protected AbstractRuntime m_rt;
     protected IStreamFactory m_sf;
-    protected CorfuDBClient m_client;
+    protected CorfuDBRuntime m_client;
     protected long m_exec;
     CyclicBarrier m_startbarrier;   // start barrier to ensure all threads finish init before tx loop
     CyclicBarrier m_stopbarrier;    // stop barrier to ensure no thread returns until all have finished
@@ -430,9 +431,9 @@ public abstract class MicroBenchmark {
      */
     public MicroBenchmark(Options options) {
         m_options = options;
-        m_client = getClient();
-        m_sf = StreamFactory.getStreamFactory(m_client, m_options.getStreamImplementation());
-        m_rt = getRuntime();
+        m_client = getRuntime();
+        // m_sf = StreamFactory.getStreamFactory(m_client, m_options.getStreamImplementation());
+        m_rt = getRuntimeIfc();
         m_startbarrier = new CyclicBarrier(m_options.getThreadCount());
         m_stopbarrier = new CyclicBarrier(m_options.getThreadCount());
         m_partitions = new MicroBenchmarkPartition[m_options.getThreadCount()];
@@ -442,9 +443,9 @@ public abstract class MicroBenchmark {
      * get a new client object/connection
      * @return
      */
-    protected CorfuDBClient getClient() {
+    protected CorfuDBRuntime getRuntime() {
 
-        CorfuDBClient crf=new CorfuDBClient(m_options.getMaster());
+        CorfuDBRuntime crf = new CorfuDBRuntime(m_options.getMaster());
         crf.startViewManager();
         crf.waitForViewReady();
         return crf;
@@ -454,8 +455,9 @@ public abstract class MicroBenchmark {
      * get a runtime object
      * @return a new object that implements abstract runtime
      */
-    protected AbstractRuntime getRuntime() {
-        long roid = DirectoryService.getUniqueID(m_sf);
+    protected AbstractRuntime getRuntimeIfc() {
+        //long roid = DirectoryService.getUniqueID(m_sf);
+        UUID roid = DirectoryService.getUniqueID(m_sf);
         if(m_options.getRuntime().toUpperCase().contains("SIMPLE"))
             return new SimpleRuntime(m_sf, roid, m_options.getRPCHostName(), m_options.getRPCPort());
         if(m_options.getRuntime().toUpperCase().contains("TX"))
